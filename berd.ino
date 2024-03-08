@@ -12,7 +12,7 @@ int height = 320;
 
 TFT_eSPI tft = TFT_eSPI();
 Berd berdie = Berd(50, 30, 20, 20, 300, TFT_BLUE);
-Obstacle obs = Obstacle(1, 10, 100, width, height, TFT_YELLOW);
+Obstacle obs = Obstacle(2, 10, 100, width, height, TFT_YELLOW);
 int score = 0;
 
 int button_pressed, obs_px, berd_py, prev_score;
@@ -32,20 +32,39 @@ void setup() {
 }
 
 void loop() {
-	button_pressed = input(INPUT_PIN, &tft);
+	button_pressed = input(INPUT_PIN);
 	obs_px = obs.x;
 	berd_py = berdie.y;
 
 	prev_score = score;
-	score += obs.update();
-	obs.push(obs_px, TFT_BLACK, &tft);
 
-	berdie.update(button_pressed, width, height, 0.02);
+	if (!obs.check_collision(&berdie, &tft)){
+		score += obs.update();
+		berdie.update(button_pressed, width, height, 0.02);
+	}
+	else {
+		score = 0;
+		obs = Obstacle(1, 10, 100, width, height, TFT_YELLOW);
+		tft.fillScreen(TFT_BLACK);
+
+		tft.setTextColor(TFT_RED);
+		tft.drawCentreString("Game Over", width/2, height/2 - 20, 1);
+
+		tft.setTextColor(TFT_WHITE);
+		tft.setTextSize(1);
+		tft.drawCentreString("Press the button to play again", width/2, height/2, 1);
+		tft.setTextSize(2);
+
+		while (!input(INPUT_PIN)) delay(10);
+
+		tft.fillScreen(TFT_BLACK);
+	}
+	if (prev_score != score) tft.fillRect(0, 0, width, 15, TFT_BLACK);
+	obs.push(obs_px, TFT_BLACK, &tft);
 	berdie.push(berd_py, TFT_BLACK, &tft);
-	
+
 	tft.setCursor(0,0);
 	tft.println("Score: " + String(score));
-	Serial.println(String(score));
 	
 	delay(20);
 }

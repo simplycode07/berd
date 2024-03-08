@@ -1,7 +1,7 @@
 class Berd {
 	public:
-		int w;
-		int h;
+		int width;
+		int height;
 
 		int x;
 		int y;
@@ -15,14 +15,14 @@ class Berd {
 			this->x = x;
 			this->y = y;
 			
-			this->w = width;
-			this->h = height;
+			this->width = width;
+			this->height = height;
 
 			this->color = color;
 			this->gravity = gravity;
 		}
 
-		void update(int input, int width, int height, double dt) {
+		void update(int input, int screen_width, int screen_height, double dt) {
 			if (input == 1) {
 				vel_y = -150;
 				color = TFT_RED;
@@ -38,8 +38,8 @@ class Berd {
 				y = 0;
 				vel_y = 0;
 			}
-			if (y > (height - h)) {
-				y = height - h;
+			if (y > (screen_height - height)) {
+				y = screen_height - height;
 				vel_y = 0;
 			}
 
@@ -47,14 +47,14 @@ class Berd {
 
 		void push(int py, uint16_t background, TFT_eSPI *tft) {
 			if (y > py) 
-				tft->fillRect(x, py, w, (y - py), background);
+				tft->fillRect(x, py, width, (y - py), background);
 			
 
 			if (py > y) 
-				tft->fillRect(x, (y + h), w, (py - y), background);
+				tft->fillRect(x, (y + height), width, (py - y), background);
 			
 
-			tft -> fillRect(x, y, w, h, color);
+			tft -> fillRect(x, y, width, height, color);
 		}
 };
 
@@ -100,6 +100,21 @@ class Obstacle {
 			}
 
 			return 0;
+		}
+
+		bool check_collision(Berd *berdie, TFT_eSPI *tft) {
+			return (x < berdie->x + berdie->width &&
+					x + width > berdie->x &&
+				(
+					// check for collisoin with upper part
+					(y < berdie->y + berdie->height &&
+					y + height > berdie->y) ||
+
+					//check for collisoin with lower part
+					((height+gap) < berdie->y + berdie->height &&
+					(screen_height) > berdie->y)
+				)
+			);
 		}
 
 		void push(int px, uint16_t background, TFT_eSPI *tft) {
