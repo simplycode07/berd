@@ -11,7 +11,5 @@ Flappy bird clone for esp8266 (haven't tested it on any others)
 ![picture of prototype](images/prototype.png)
 
 
-
-
 https://github.com/simplycode07/berd/assets/72332741/b904016a-e158-427d-940a-7da6fa0c82a3
 
