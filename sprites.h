@@ -86,9 +86,12 @@ class Obstacle {
 
 			this->color = color;
 
-			this->height = random(screen_height - gap);
+			randomize();
 		}
 
+		void randomize(){
+			this->height = random(screen_height - gap);
+		}
 
 		int update(){
 			if ((x + width) > 0) {

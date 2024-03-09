@@ -7,6 +7,7 @@
 #include "funcs.h"
 
 int INPUT_PIN = 10;
+int buzzer = D0;
 int width = 240;
 int height = 320;
 
@@ -14,7 +15,7 @@ TFT_eSPI tft = TFT_eSPI();
 Berd berdie = Berd(50, 30, 20, 20, 300, TFT_BLUE);
 Obstacle obs = Obstacle(2, 10, 100, width, height, TFT_YELLOW);
 int score = 0;
-
+int amplitude = 0;
 int button_pressed, obs_px, berd_py, prev_score;
 
 void setup() {
@@ -27,11 +28,12 @@ void setup() {
 	tft.fillScreen(TFT_BLACK);
 	tft.setRotation(2);
 
-	tft.setTextColor(TFT_WHITE, TFT_BLACK);
+	tft.setTextColor(TFT_WHITE);
 	tft.setTextSize(2);
 }
 
 void loop() {
+
 	button_pressed = input(INPUT_PIN);
 	obs_px = obs.x;
 	berd_py = berdie.y;
@@ -44,7 +46,9 @@ void loop() {
 	}
 	else {
 		score = 0;
-		obs = Obstacle(1, 10, 100, width, height, TFT_YELLOW);
+		//obs = Obstacle(1, 10, 100, width, height, TFT_YELLOW);
+		obs.randomize();
+		obs.x = width;
 		tft.fillScreen(TFT_BLACK);
 
 		tft.setTextColor(TFT_RED);
