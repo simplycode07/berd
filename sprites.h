@@ -24,7 +24,7 @@ class Berd {
 
 		void update(int input, int screen_width, int screen_height, double dt) {
 			if (input == 1) {
-				vel_y = -150;
+				vel_y = -1 * this->gravity / 2;
 				color = TFT_RED;
 			}
 			else {

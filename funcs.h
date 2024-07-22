@@ -1,6 +1,3 @@
-//#include "TFT_eSPI.h"
-
-
 int input(int input_pin) {
 
 	static int prev_state = 0;
